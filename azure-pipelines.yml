@@ -1,0 +1,54 @@
+trigger:
+- main
+
+pool:
+  name: linux-hosted-agen
+
+steps:
+- checkout: self
+
+# Terrafrom Intit
+- task: TerraformTaskV4@4
+  displayName: Terraform Init
+  inputs:
+    provider: 'azurerm'
+    command: 'init'
+    backendServiceArm: 'Azure subscription 1(21)(2fe27ce6-1055-460c-8546-9b26931a4b9a)'
+    backendAzureRmResourceGroupName: 'rg-tf-backend'
+    backendAzureRmStorageAccountName: 'tfbackendstore01shiv'
+    backendAzureRmContainerName: 'tfstate'
+    backendAzureRmKey: 'terraform.tfstate'
+
+#Terraform Validate
+- task: TerraformTask@5
+  displayName: Terrafrom Validate
+  inputs:
+    provider: 'azurerm'
+    command: 'validate'
+
+#Terrafrom Plan
+- task: TerraformTask@5
+  displayName: Terrafrom Plan
+  inputs:
+    provider: 'azurerm'
+    command: 'plan'
+    commandOptions: '-var-file=env/dev.tfvars'
+    environmentServiceNameAzureRM: 'Azure subscription 1(22)(2fe27ce6-1055-460c-8546-9b26931a4b9a)'
+
+#terrafrom Apply
+- task: TerraformTask@5
+  displayName: Terrafrom Plan
+  inputs:
+    provider: 'azurerm'
+    command: 'apply'
+    commandOptions: '-auto-approve -var-file=env/dev.tfvars'
+    environmentServiceNameAzureRM: 'Azure subscription 1(24)(2fe27ce6-1055-460c-8546-9b26931a4b9a)'
+
+#terrafrom Destroy
+- task: TerraformTask@5
+  displayName: Terrafrom Plan
+  inputs:
+    provider: 'azurerm'
+    command: 'destroy'
+    commandOptions: '-auto-approve -var-file=env/dev.tfvars'
+    environmentServiceNameAzureRM: 'Azure subscription 1(24)(2fe27ce6-1055-460c-8546-9b26931a4b9a)'
