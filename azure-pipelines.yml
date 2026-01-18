@@ -37,7 +37,7 @@ steps:
 
 #terrafrom Apply
 - task: TerraformTask@5
-  displayName: Terrafrom Plan
+  displayName: Terrafrom apply
   inputs:
     provider: 'azurerm'
     command: 'apply'
@@ -46,7 +46,7 @@ steps:
 
 #terrafrom Destroy
 - task: TerraformTask@5
-  displayName: Terrafrom Plan
+  displayName: Terrafrom destroy
   inputs:
     provider: 'azurerm'
     command: 'destroy'
